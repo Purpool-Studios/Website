@@ -19,7 +19,13 @@ export class GameApiClient implements IApiClient {
 
   public async getCurrentUser(): Promise<UserProfile | null> {
     const headers = await this.getHeaders();
-    const response = await fetch(`${this.baseUrl}/api/v1/users/me`, { headers });
+    const response = await fetch(`${this.baseUrl}/api/v1/users/me`, { 
+      method: 'GET',
+      headers,
+      // SOLUCIÓN 2: Evitamos el falso 404 forzando al navegador a ignorar la caché 
+      // y consultar siempre el estado real en el servidor.
+      cache: 'no-cache' 
+    });
     
     if (response.status === 404) return null;
     if (!response.ok) throw new Error(`[API] Error fetching user: ${response.status}`);
