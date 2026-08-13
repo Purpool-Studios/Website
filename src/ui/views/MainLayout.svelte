@@ -2,14 +2,15 @@
   import TopNavBar from '../components/TopNavBar.svelte';
   import BottomNavBar from '../components/BottomNavBar.svelte';
 
-  export let onLogout: () => void;
+  // Svelte 5 Props
+  let { onLogout }: { onLogout: () => void } = $props();
 </script>
 
 <div class="layout-container">
+  <!-- Pasamos la función al componente hijo -->
   <TopNavBar {onLogout} />
   
   <main class="viewport">
-    <!-- Aquí se inyectará el contexto 3D/WebGL del juego o las vistas internas -->
     <div class="viewport-placeholder">
       <div class="grid-overlay"></div>
       <h2>SISTEMA EN LÍNEA</h2>
@@ -32,12 +33,11 @@
   .viewport {
     flex: 1;
     position: relative;
-    margin-top: 40px; /* Altura del TopNav */
-    margin-bottom: 80px; /* Altura del BottomNav */
+    margin-top: 40px; 
+    margin-bottom: 80px; 
     overflow: hidden;
   }
 
-  /* Placeholder temporal para denotar dónde va el core del juego */
   .viewport-placeholder {
     width: 100%;
     height: 100%;

@@ -11,3 +11,5 @@ package
 # End of https://www.toptal.com/developers/gitignore/api/svelte
 
 *.env*
+node_modules/
+package-lock.json

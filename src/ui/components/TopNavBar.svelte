@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let onLogout: () => void;
+  // Svelte 5 Props
+  let { onLogout }: { onLogout: () => void } = $props();
 
   const handleAction = (action: string) => {
     console.log(`[TopNav] Acción disparada: ${action}`);

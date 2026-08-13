@@ -1,11 +1,11 @@
 <script lang="ts">
-  // Propiedad recibida desde App.svelte para mutar el estado simulado de Auth
-  export let onLogin: () => void;
+  import type { IAuthService } from '../../contracts/auth';
 
-  const handleLoginClick = (): void => {
-    // Aquí iría la integración real con la capa de infraestructura (Auth0)
-    console.log('[Auth] Redirigiendo a Auth0...');
-    onLogin();
+  // Svelte 5: Declaración de props
+  let { authService }: { authService: IAuthService } = $props();
+
+  const handleLoginClick = async (): Promise<void> => {
+    await authService.login(); // Dispara la redirección a Auth0
   };
 </script>
 
