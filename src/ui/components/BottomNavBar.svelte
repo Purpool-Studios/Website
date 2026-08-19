@@ -1,5 +1,13 @@
 <script lang="ts">
-  let { activeTab, onSelectTab }: { activeTab: string; onSelectTab: (id: string) => void } = $props();
+  let { 
+    activeTab, 
+    onSelectTab, 
+    hidden = false 
+  }: { 
+    activeTab: string; 
+    onSelectTab: (id: string) => void;
+    hidden?: boolean;
+  } = $props();
 
   const navItems = [
     { id: 'new_game', label: 'Nuevo Juego' },
@@ -9,7 +17,7 @@
   ];
 </script>
 
-<nav class="bottom-nav">
+<nav class="bottom-nav {hidden ? 'hidden' : ''}">
   <ul class="nav-list">
     {#each navItems as item}
       <li>
@@ -38,6 +46,15 @@
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 1rem;
+    /* Transición suave para ocultar/mostrar la barra hacia abajo */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+  }
+
+  /* Desplaza la barra hacia abajo fuera de la vista */
+  .bottom-nav.hidden {
+    transform: translateY(100%);
+    pointer-events: none;
   }
 
   .nav-list {

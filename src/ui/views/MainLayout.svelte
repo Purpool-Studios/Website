@@ -26,7 +26,7 @@
 <div class="layout-container">
   <TopNavBar {onLogout} />
   
-  <main class="viewport">
+  <main class="viewport {isMatchActive ? 'full-height' : ''}">
     <div class="grid-overlay"></div>
     
     {#if activeTab === 'new_game'}
@@ -52,7 +52,12 @@
     {/if}
   </main>
 
-  <BottomNavBar {activeTab} onSelectTab={handleSelectTab} />
+  <!-- Pasa la prop hidden según el estado de la partida -->
+  <BottomNavBar 
+    {activeTab} 
+    onSelectTab={handleSelectTab} 
+    hidden={isMatchActive} 
+  />
 </div>
 
 <style>
@@ -64,6 +69,12 @@
   .viewport {
     flex: 1; position: relative; margin-top: 40px; margin-bottom: 80px; 
     overflow: hidden; display: flex; flex-direction: column;
+    transition: margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Elimina el margen inferior para expandir el juego cuando la barra está oculta */
+  .viewport.full-height {
+    margin-bottom: 0;
   }
 
   .grid-overlay {
