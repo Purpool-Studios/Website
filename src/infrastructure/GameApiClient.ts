@@ -1,10 +1,9 @@
-import type { IApiClient, UserProfile } from '../contracts/api';
+import type { IApiClient, UserProfile, MatchResponse, MinigameSubmitPayload } from '../contracts/api';
 import type { IAuthService } from '../contracts/auth';
 
 export class GameApiClient implements IApiClient {
   private readonly baseUrl: string;
 
-  // Inyectamos IAuthService para garantizar que siempre obtenemos el token más reciente
   constructor(private readonly authService: IAuthService) {
     this.baseUrl = import.meta.env.VITE_API_BASE_URL;
   }
@@ -22,8 +21,6 @@ export class GameApiClient implements IApiClient {
     const response = await fetch(`${this.baseUrl}/api/v1/users/me`, { 
       method: 'GET',
       headers,
-      // SOLUCIÓN 2: Evitamos el falso 404 forzando al navegador a ignorar la caché 
-      // y consultar siempre el estado real en el servidor.
       cache: 'no-cache' 
     });
     
@@ -44,5 +41,45 @@ export class GameApiClient implements IApiClient {
     if (!response.ok) throw new Error(`[API] Error creating user: ${response.status}`);
     
     return await response.json();
+  }
+
+  // --- Endpoints de Partidas ---
+
+  public async requestMatch(): Promise<MatchResponse> {
+    const headers = await this.getHeaders();
+    const response = await fetch(`${this.baseUrl}/api/v1/matches`, { method: 'POST', headers });
+    
+    if (response.status === 409) throw new Error('MATCH_IN_PROGRESS');
+    if (!response.ok) throw new Error(`[API] Error requesting match: ${response.status}`);
+    
+    return await response.json();
+  }
+
+  public async startMinigameTimer(): Promise<void> {
+    const headers = await this.getHeaders();
+    const response = await fetch(`${this.baseUrl}/api/v1/matches/current/start`, { method: 'POST', headers });
+    if (!response.ok) throw new Error(`[API] Error starting timer: ${response.status}`);
+  }
+
+  public async submitMinigameResult(payload: MinigameSubmitPayload): Promise<MatchResponse> {
+    const headers = await this.getHeaders();
+    const response = await fetch(`${this.baseUrl}/api/v1/matches/current/submit`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+    
+    if (response.status === 408) throw new Error('MATCH_TIMEOUT');
+    if (!response.ok) throw new Error(`[API] Error submitting result: ${response.status}`);
+    
+    return await response.json();
+  }
+
+  public async abandonMatch(): Promise<void> {
+    const headers = await this.getHeaders();
+    const response = await fetch(`${this.baseUrl}/api/v1/matches/current`, { method: 'DELETE', headers });
+    if (!response.ok && response.status !== 204) {
+      throw new Error(`[API] Error abandoning match: ${response.status}`);
+    }
   }
 }

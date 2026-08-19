@@ -8,16 +8,13 @@
   import OnboardingView from './views/OnboardingView.svelte';
   import MainLayout from './views/MainLayout.svelte';
 
-  // Inyección de dependencias usando Svelte 5 Runes
   let { authService, apiClient }: { authService: IAuthService; apiClient: IApiClient } = $props();
 
-  // Máquina de estados estricta
   type AppState = 'INITIALIZING' | 'LANDING' | 'PROCESSING_AUTH' | 'ONBOARDING' | 'MAIN';
   let currentState: AppState = $state('INITIALIZING');
 
   onMount(async () => {
     try {
-      // 1. Si venimos redirigidos desde Auth0, interceptamos antes de hacer nada.
       if (authService.hasRedirectCallback()) {
         currentState = 'PROCESSING_AUTH';
         await authService.handleRedirectCallback();
@@ -25,10 +22,9 @@
         return;
       }
 
-      // 2. Si no es un callback, revisamos si el usuario ya tiene sesión activa
       const isAuth = await authService.isAuthenticated();
       if (isAuth) {
-        currentState = 'PROCESSING_AUTH'; // Mostramos pantalla de carga
+        currentState = 'PROCESSING_AUTH'; 
         await evaluateUserDatabase();
       } else {
         currentState = 'LANDING';
@@ -43,13 +39,13 @@
     try {
       const user = await apiClient.getCurrentUser();
       if (user) {
-        currentState = 'MAIN'; // Usuario existe, directo al juego
+        currentState = 'MAIN'; 
       } else {
-        currentState = 'ONBOARDING'; // Nuevo usuario, pedir username
+        currentState = 'ONBOARDING'; 
       }
     } catch (error) {
       console.error("[App] Error validando base de datos:", error);
-      authService.logout(); // Fail-safe
+      authService.logout(); 
     }
   };
 
@@ -59,7 +55,6 @@
 </script>
 
 {#if currentState === 'INITIALIZING'}
-  <!-- Pantalla negra o spinner mientras se carga Auth0 -->
   <div class="loader-bg"></div>
 {:else if currentState === 'LANDING'}
   <LandingView {authService} />
@@ -68,7 +63,8 @@
 {:else if currentState === 'ONBOARDING'}
   <OnboardingView {apiClient} onComplete={onOnboardingComplete} />
 {:else if currentState === 'MAIN'}
-  <MainLayout onLogout={() => authService.logout()} />
+  <!-- AHORA INYECTAMOS EL apiClient A MainLayout -->
+  <MainLayout {apiClient} onLogout={() => authService.logout()} />
 {/if}
 
 <style>
