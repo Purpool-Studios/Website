@@ -2,7 +2,7 @@ export interface UserProfile {
   username: string;
 }
 
-// --- Nuevas estructuras para Partidas ---
+// --- Estructuras para Partidas ---
 export interface MinigameInfo {
   id: string;
   name: string;
@@ -31,6 +31,21 @@ export interface MinigameSubmitPayload {
   total_answers: number;
 }
 
+// --- Estructuras para Tabla de Clasificaciones ---
+export interface LeaderboardEntry {
+  rank: number;
+  username: string;
+  score: number;
+}
+
+export interface LeaderboardResponse {
+  entries: LeaderboardEntry[];
+  current_page: number;
+  total_pages: number;
+  total_users: number;
+  current_user: LeaderboardEntry | null;
+}
+
 export interface IApiClient {
   getCurrentUser(): Promise<UserProfile | null>;
   createUser(username: string): Promise<UserProfile>;
@@ -40,4 +55,7 @@ export interface IApiClient {
   startMinigameTimer(): Promise<void>;
   submitMinigameResult(payload: MinigameSubmitPayload): Promise<MatchResponse>;
   abandonMatch(): Promise<void>;
+
+  // Endpoint de Clasificaciones
+  getLeaderboard(page?: number, category?: string): Promise<LeaderboardResponse>;
 }

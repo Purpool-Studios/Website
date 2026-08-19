@@ -1,5 +1,5 @@
 <script lang="ts">
-  let activeTab = 'new_game';
+  let { activeTab, onSelectTab }: { activeTab: string; onSelectTab: (id: string) => void } = $props();
 
   const navItems = [
     { id: 'new_game', label: 'Nuevo Juego' },
@@ -7,12 +7,6 @@
     { id: 'profile', label: 'Perfil' },
     { id: 'social', label: 'Social' }
   ];
-
-  const selectTab = (id: string) => {
-    activeTab = id;
-    console.log(`[BottomNav] Navegando a: ${id}`);
-    // Aquí se emitiría un evento al router interno de la UI
-  };
 </script>
 
 <nav class="bottom-nav">
@@ -21,7 +15,7 @@
       <li>
         <button 
           class="nav-btn {activeTab === item.id ? 'active' : ''}" 
-          on:click={() => selectTab(item.id)}
+          on:click={() => onSelectTab(item.id)}
         >
           {item.label}
         </button>
@@ -69,7 +63,6 @@
     transition: all 0.3s ease;
   }
 
-  /* Estilos Sci-Fi para el estado activo y hover */
   .nav-btn::after {
     content: '';
     position: absolute;

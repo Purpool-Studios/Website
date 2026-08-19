@@ -1,4 +1,4 @@
-import type { IApiClient, UserProfile, MatchResponse, MinigameSubmitPayload } from '../contracts/api';
+import type { IApiClient, UserProfile, MatchResponse, MinigameSubmitPayload, LeaderboardResponse } from '../contracts/api';
 import type { IAuthService } from '../contracts/auth';
 
 export class GameApiClient implements IApiClient {
@@ -81,5 +81,28 @@ export class GameApiClient implements IApiClient {
     if (!response.ok && response.status !== 204) {
       throw new Error(`[API] Error abandoning match: ${response.status}`);
     }
+  }
+
+  // --- Endpoint de Clasificaciones ---
+
+  public async getLeaderboard(page: number = 1, category?: string): Promise<LeaderboardResponse> {
+    const headers = await this.getHeaders();
+    const queryParams = new URLSearchParams({ page: page.toString() });
+    
+    if (category) {
+      queryParams.append('category', category);
+    }
+
+    const response = await fetch(`${this.baseUrl}/api/v1/leaderboard?${queryParams.toString()}`, {
+      method: 'GET',
+      headers,
+      cache: 'no-cache'
+    });
+
+    if (!response.ok) {
+      throw new Error(`[API] Error fetching leaderboard: ${response.status}`);
+    }
+
+    return await response.json();
   }
 }

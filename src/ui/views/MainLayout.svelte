@@ -2,18 +2,24 @@
   import TopNavBar from '../components/TopNavBar.svelte';
   import BottomNavBar from '../components/BottomNavBar.svelte';
   import MatchOrchestrator from './MatchOrchestrator.svelte';
+  import LeaderboardView from './LeaderboardView.svelte';
   import type { IApiClient } from '../../contracts/api';
 
   let { apiClient, onLogout }: { apiClient: IApiClient; onLogout: () => void } = $props();
 
-  let activeMode = $state<'DASHBOARD' | 'MATCH'>('DASHBOARD');
+  let activeTab = $state('new_game');
+  let isMatchActive = $state(false);
+
+  const handleSelectTab = (tabId: string) => {
+    activeTab = tabId;
+  };
 
   const handleStartMatch = () => {
-    activeMode = 'MATCH';
+    isMatchActive = true;
   };
 
   const handleExitMatch = () => {
-    activeMode = 'DASHBOARD';
+    isMatchActive = false;
   };
 </script>
 
@@ -23,21 +29,30 @@
   <main class="viewport">
     <div class="grid-overlay"></div>
     
-    {#if activeMode === 'DASHBOARD'}
+    {#if activeTab === 'new_game'}
+      {#if !isMatchActive}
+        <div class="dashboard-content">
+          <h2>SISTEMA NEURONAL EN LÍNEA</h2>
+          <p class="subtitle">Selecciona tu protocolo de sincronización</p>
+          
+          <button class="btn-primary" on:click={handleStartMatch}>
+            INICIAR PARTIDA
+          </button>
+        </div>
+      {:else}
+        <MatchOrchestrator {apiClient} onExit={handleExitMatch} />
+      {/if}
+    {:else if activeTab === 'leaderboard'}
+      <LeaderboardView {apiClient} />
+    {:else}
       <div class="dashboard-content">
-        <h2>SISTEMA NEURONAL EN LÍNEA</h2>
-        <p class="subtitle">Selecciona tu protocolo de sincronización</p>
-        
-        <button class="btn-primary" on:click={handleStartMatch}>
-          INICIAR PARTIDA
-        </button>
+        <h2>MÓDULO EN DESARROLLO</h2>
+        <p class="subtitle">Sección [{activeTab.toUpperCase()}] no disponible en esta fase.</p>
       </div>
-    {:else if activeMode === 'MATCH'}
-      <MatchOrchestrator {apiClient} onExit={handleExitMatch} />
     {/if}
   </main>
 
-  <BottomNavBar />
+  <BottomNavBar {activeTab} onSelectTab={handleSelectTab} />
 </div>
 
 <style>
