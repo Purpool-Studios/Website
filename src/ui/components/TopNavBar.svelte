@@ -12,9 +12,9 @@
   <div class="nav-content">
     <div class="spacer"></div>
     <div class="actions">
-      <button class="top-btn" on:click={() => handleAction('settings')}>Configuración</button>
-      <button class="top-btn" on:click={() => handleAction('help')}>Ayuda</button>
-      <button class="top-btn btn-danger" on:click={() => handleAction('logout')}>Salir</button>
+      <button class="top-btn" onclick={() => handleAction('settings')}>Configuración</button>
+      <button class="top-btn" onclick={() => handleAction('help')}>Ayuda</button>
+      <button class="top-btn btn-danger" onclick={() => handleAction('logout')}>Salir</button>
     </div>
   </div>
 </header>

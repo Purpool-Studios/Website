@@ -14,8 +14,8 @@
   
   // Estadísticas y Tiempo
   let timeLeft = $state(60);
-  let correctCount = 0;
-  let totalCount = 0;
+  let correctCount = $state(0);
+  let totalCount = $state(0);
   let timerInterval: number;
 
   onMount(() => {
@@ -72,7 +72,7 @@
 
       <div class="options-grid">
         {#each roundState.options as option}
-          <button class="option-btn" on:click={() => handleAnswerSelect(option)}>
+          <button class="option-btn" onclick={() => handleAnswerSelect(option)}>
             {option}
           </button>
         {/each}

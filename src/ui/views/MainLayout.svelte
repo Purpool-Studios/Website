@@ -35,7 +35,7 @@
           <h2>SISTEMA NEURONAL EN LÍNEA</h2>
           <p class="subtitle">Selecciona tu protocolo de sincronización</p>
           
-          <button class="btn-primary" on:click={handleStartMatch}>
+          <button class="btn-primary" onclick={handleStartMatch}>
             INICIAR PARTIDA
           </button>
         </div>

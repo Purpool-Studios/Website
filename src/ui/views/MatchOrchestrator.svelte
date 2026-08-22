@@ -83,8 +83,8 @@
       <h3 class="text-danger">CONFLICTO DETECTADO</h3>
       <p>Ya tienes una partida en progreso abandonada previamente.</p>
       <div class="actions">
-        <button class="btn btn-danger" on:click={forceAbandonMatch}>PURGAR Y REINICIAR</button>
-        <button class="btn" on:click={onExit}>CANCELAR</button>
+        <button class="btn btn-danger" onclick={forceAbandonMatch}>PURGAR Y REINICIAR</button>
+        <button class="btn" onclick={onExit}>CANCELAR</button>
       </div>
     </div>
 
@@ -92,7 +92,7 @@
     <div class="center-content panel border-danger">
       <h3 class="text-danger">FALLO DEL SISTEMA</h3>
       <p>{errorMessage}</p>
-      <button class="btn" on:click={onExit}>VOLVER AL NÚCLEO</button>
+      <button class="btn" onclick={onExit}>VOLVER AL NÚCLEO</button>
     </div>
 
   {:else if currentState === 'TUTORIAL' && matchData?.current_minigame}
@@ -107,8 +107,8 @@
       </div>
       
       <div class="actions">
-        <button class="btn btn-primary" on:click={handleStartMinigame}>INICIAR ENLACE</button>
-        <button class="btn btn-danger" on:click={async () => { await apiClient.abandonMatch(); onExit(); }}>ABANDONAR</button>
+        <button class="btn btn-primary" onclick={handleStartMinigame}>INICIAR ENLACE</button>
+        <button class="btn btn-danger" onclick={async () => { await apiClient.abandonMatch(); onExit(); }}>ABANDONAR</button>
       </div>
     </div>
 
@@ -123,7 +123,7 @@
     <div class="center-content panel border-success">
       <h2 class="text-success">SECUENCIA COMPLETADA</h2>
       <p class="score-text">Puntaje Consolidado: <strong>{matchData?.match.score}</strong></p>
-      <button class="btn btn-primary mt-2" on:click={onExit}>FINALIZAR</button>
+      <button class="btn btn-primary mt-2" onclick={onExit}>FINALIZAR</button>
     </div>
   {/if}
 </div>

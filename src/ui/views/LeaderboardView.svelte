@@ -58,7 +58,7 @@
     {#each categories as category}
       <button
         class="tab-btn {selectedCategory === category.id ? 'active' : ''}"
-        on:click={() => selectCategory(category.id)}
+        onclick={() => selectCategory(category.id)}
       >
         {category.label}
       </button>
@@ -127,7 +127,7 @@
       <button
         class="page-btn"
         disabled={currentPage <= 1 || isLoading}
-        on:click={() => changePage(currentPage - 1)}
+        onclick={() => changePage(currentPage - 1)}
       >
         &lt; ANTERIOR
       </button>
@@ -137,7 +137,7 @@
       <button
         class="page-btn"
         disabled={currentPage >= leaderboardData.total_pages || isLoading}
-        on:click={() => changePage(currentPage + 1)}
+        onclick={() => changePage(currentPage + 1)}
       >
         SIGUIENTE &gt;
       </button>

@@ -23,7 +23,7 @@
       <li>
         <button 
           class="nav-btn {activeTab === item.id ? 'active' : ''}" 
-          on:click={() => onSelectTab(item.id)}
+          onclick={() => onSelectTab(item.id)}
         >
           {item.label}
         </button>

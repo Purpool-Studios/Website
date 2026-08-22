@@ -33,7 +33,7 @@
     <h2 class="panel-title">INICIALIZACIÓN DE ENTIDAD</h2>
     <p class="panel-desc">Registra tu designación cósmica en la red de Wits Olympiads.</p>
 
-    <form class="sci-fi-form" on:submit={handleSubmit}>
+    <form class="sci-fi-form" onsubmit={handleSubmit}>
       <div class="input-group">
         <label for="username">Identificador (Username)</label>
         <input 

@@ -29,7 +29,7 @@
         </p>
       </div>
       
-      <button class="btn-sci-fi" on:click={handleLoginClick}>
+      <button class="btn-sci-fi" onclick={handleLoginClick}>
         <span class="btn-text">INICIAR SESIÓN</span>
       </button>
     </section>
