@@ -1,4 +1,4 @@
-export type SectionId = 'inicio' | 'estudio' | 'proyectos' | 'tecnologia' | 'contacto';
+export type SectionId = 'inicio' | 'estudio' | 'miembros' | 'proyectos' | 'tecnologia' | 'contacto';
 
 export interface EngineMetrics {
   readonly fps: number;

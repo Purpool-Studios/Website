@@ -48,6 +48,13 @@
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 8v4l2.5 2.5" />
                 </svg>
+              {:else if item.id === 'miembros'}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="8" r="3.2" />
+                  <path d="M3.5 19c0-2.8 2.5-4.8 5.5-4.8s5.5 2 5.5 4.8" />
+                  <circle cx="16.5" cy="9" r="2.5" />
+                  <path d="M15.5 14.5c2.4.2 4.5 1.8 4.5 4.5" />
+                </svg>
               {:else if item.id === 'proyectos'}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="8" height="7" rx="2" />
@@ -202,14 +209,14 @@
     height: 100%;
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 760px) {
     .floating-dock-wrapper {
-      bottom: 0.95rem;
+      bottom: 0.85rem;
     }
 
     .floating-dock {
-      gap: 0.2rem;
-      padding: 0.38rem 0.42rem;
+      gap: 0.15rem;
+      padding: 0.36rem 0.4rem;
     }
 
     .dock-brand,
@@ -219,15 +226,15 @@
 
     .dock-item {
       flex-direction: column;
-      gap: 0.2rem;
-      padding: 0.45rem 0.72rem;
-      border-radius: 18px;
-      font-size: 0.7rem;
+      gap: 0.18rem;
+      padding: 0.4rem 0.56rem;
+      border-radius: 16px;
+      font-size: 0.66rem;
     }
 
     .dock-icon {
-      width: 1.05rem;
-      height: 1.05rem;
+      width: 1rem;
+      height: 1rem;
     }
   }
 </style>

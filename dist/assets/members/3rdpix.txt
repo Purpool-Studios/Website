@@ -1,0 +1,7 @@
+Public profile picture:
+https://avatars.githubusercontent.com/u/86542704
+
+Information:
+Software designer, experience in low level programming, Qt Framework, FPGA, numerical analysis.
+Many contributions to the open source community.
+Lead of Purpool Studios, responsible for the development of the website and the management of the team.

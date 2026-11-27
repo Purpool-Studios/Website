@@ -1,8 +1,15 @@
-import type { NavItem, ProjectItem, StackLayer, StudioPillar } from '@contracts/portfolio';
+import type {
+  NavItem,
+  ProjectItem,
+  StackLayer,
+  StudioPillar,
+  TeamMember
+} from '@contracts/portfolio';
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'estudio', label: 'Estudio' },
+  { id: 'miembros', label: 'Miembros' },
   { id: 'proyectos', label: 'Proyectos' },
   { id: 'tecnologia', label: 'Stack' },
   { id: 'contacto', label: 'Contacto' }
@@ -138,6 +145,63 @@ export const STACK_LAYERS: readonly StackLayer[] = [
     technology: 'Svelte 5',
     summary:
       'La capa visual opera únicamente como superposición sobre el motor, logrando transiciones fluidas y un peso mínimo en producción.'
+  }
+];
+
+export const TEAM_MEMBERS: readonly TeamMember[] = [
+  {
+    id: '3rdpix',
+    handle: '3rdpix',
+    role: 'Lead de Purpool Studios · Software Designer',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/86542704',
+    accentHex: '#c084fc',
+    summary:
+      'Líder de Purpool Studios, responsable de la dirección del equipo, el desarrollo de la plataforma web y la arquitectura de software de sistemas.',
+    skills: [
+      {
+        skill: 'Programación de Bajo Nivel & FPGA',
+        explanation:
+          'Dominio directo sobre memoria, registros, arquitectura de procesadores y diseño lógico en hardware reprogramable (FPGA), ideal para compiladores, ensambladores y entornos deterministas sin desperdicio de ciclos.'
+      },
+      {
+        skill: 'Qt Framework & Diseño de Software',
+        explanation:
+          'Creación de aplicaciones nativas de escritorio y herramientas técnicas multiplataforma con interfaces fluidas, arquitectura limpia y separación estricta de capas.'
+      },
+      {
+        skill: 'Análisis Numérico & Código Abierto',
+        explanation:
+          'Aplicación de métodos matemáticos y cálculo computacional de precisión, respaldada por múltiples contribuciones activas a proyectos de la comunidad open source.'
+      }
+    ],
+    tags: ['Low-Level', 'Qt Framework', 'FPGA', 'Análisis Numérico', 'Open Source']
+  },
+  {
+    id: 'mixuyo',
+    handle: 'mixuyo',
+    role: 'Game Designer · Character & Visual Artist',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/185843738',
+    accentHex: '#38bdf8',
+    summary:
+      'Diseñador de videojuegos con formación en artes visuales y desarrollo interactivo, especializado en dar identidad estética, personajes y mundo a cada obra del estudio.',
+    skills: [
+      {
+        skill: 'Diseño de Videojuegos & Artes Visuales',
+        explanation:
+          'Concepción de sistemas de juego, dirección artística y lenguaje visual coherente que conecta la sensibilidad plástica con mecánicas claras y atractivas.'
+      },
+      {
+        skill: 'Diseño de Personajes para Animación y Juegos',
+        explanation:
+          'Desarrollo integral de personajes —desde silueta, proporciones y expresividad hasta su preparación técnica para animación e integración en tiempo real.'
+      },
+      {
+        skill: 'Unity, Unreal Engine & Blender',
+        explanation:
+          'Manejo del pipeline completo de producción 3D y motores gráficos: modelado, materiales, iluminación y montaje de escenas interactivas en Unity y Unreal Engine.'
+      }
+    ],
+    tags: ['Game Design', 'Character Design', 'Unity', 'Unreal Engine', 'Blender']
   }
 ];
 

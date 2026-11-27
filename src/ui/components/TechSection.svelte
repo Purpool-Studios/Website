@@ -10,38 +10,36 @@
   let { layers, metrics }: Props = $props();
 </script>
 
-<section id="tecnologia" class="section">
-  <div class="container">
-    <div class="tech-header-row">
-      <div class="section-header tech-header">
-        <span class="eyebrow">Arquitectura &amp; Stack</span>
-        <h2 class="section-title">Diseñado bajo un enfoque de cero overhead.</h2>
-        <p class="section-subtitle">
-          Separamos estrictamente la simulación en TypeScript puro de la interfaz en Svelte 5 mediante contratos e invariantes tipados. El fondo interactivo que ves en esta página corre sobre esa misma arquitectura.
-        </p>
-      </div>
+<section id="tecnologia" class="card-section">
+  <div class="section-header tech-header">
+    <span class="eyebrow">Arquitectura &amp; Stack</span>
+    <h2 class="section-title">Diseñado bajo un enfoque de cero overhead.</h2>
+    <p class="section-subtitle">
+      Separamos estrictamente la simulación en TypeScript puro de la interfaz en Svelte 5 mediante contratos e invariantes tipados. El fondo interactivo que ves en esta página corre sobre esa misma arquitectura.
+    </p>
+  </div>
 
-      <aside class="telemetry-card glass-card" aria-label="Telemetría en tiempo real del motor">
-        <div class="telemetry-head">
-          <span class="telemetry-dot" aria-hidden="true"></span>
-          <span>Motor Canvas ECS en vivo</span>
+  <div class="tech-body">
+    <aside class="telemetry-card glass-card" aria-label="Telemetría en tiempo real del motor">
+      <div class="telemetry-head">
+        <span class="telemetry-dot" aria-hidden="true"></span>
+        <span>Motor Canvas ECS en vivo</span>
+      </div>
+      <div class="telemetry-values">
+        <div>
+          <span class="t-label">FPS</span>
+          <strong class="t-val">{metrics.fps || '--'}</strong>
         </div>
-        <div class="telemetry-values">
-          <div>
-            <span class="t-label">FPS</span>
-            <strong class="t-val">{metrics.fps || '--'}</strong>
-          </div>
-          <div>
-            <span class="t-label">Nodos Pool</span>
-            <strong class="t-val">{metrics.activeNodes}</strong>
-          </div>
-          <div>
-            <span class="t-label">Frame CPU</span>
-            <strong class="t-val">{metrics.frameTimeMs.toFixed(2)} ms</strong>
-          </div>
+        <div>
+          <span class="t-label">Nodos Pool</span>
+          <strong class="t-val">{metrics.activeNodes}</strong>
         </div>
-      </aside>
-    </div>
+        <div>
+          <span class="t-label">Frame CPU</span>
+          <strong class="t-val">{metrics.frameTimeMs.toFixed(2)} ms</strong>
+        </div>
+      </div>
+    </aside>
 
     <div class="stack-grid">
       {#each layers as layer (layer.layer)}
@@ -57,22 +55,26 @@
 </section>
 
 <style>
-  .tech-header-row {
+  .card-section {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
-    margin-bottom: 2.75rem;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
   }
 
   .tech-header {
     margin-bottom: 0;
   }
 
+  .tech-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    flex: 1;
+  }
+
   .telemetry-card {
-    padding: 1.15rem 1.4rem;
-    min-width: 280px;
+    padding: 1rem 1.35rem;
     border-radius: 20px;
   }
 
@@ -85,7 +87,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.75rem;
   }
 
   .telemetry-dot {
@@ -119,14 +121,14 @@
   .stack-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   .stack-card {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-    padding: 1.85rem;
+    gap: 0.5rem;
+    padding: 1.5rem;
   }
 
   .stack-kicker {
@@ -139,31 +141,27 @@
 
   .stack-title {
     margin: 0.1rem 0 0;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: var(--text-primary);
   }
 
   .stack-tech {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--accent-lavender);
   }
 
   .stack-summary {
-    margin: 0.35rem 0 0;
-    font-size: 0.96rem;
+    margin: 0.3rem 0 0;
+    font-size: 0.93rem;
     color: var(--text-secondary);
-    line-height: 1.62;
+    line-height: 1.6;
   }
 
   @media (max-width: 780px) {
     .stack-grid {
       grid-template-columns: 1fr;
-    }
-
-    .telemetry-card {
-      width: 100%;
     }
   }
 </style>

@@ -7,7 +7,8 @@ import { CanvasRenderSystem } from './systems/CanvasRenderSystem';
 const SECTION_ENERGY: Record<SectionId, number> = {
   inicio: 0.45,
   estudio: 0.35,
-  proyectos: 0.55,
+  miembros: 0.48,
+  proyectos: 0.58,
   tecnologia: 0.65,
   contacto: 0.3
 };

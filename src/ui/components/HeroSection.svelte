@@ -71,23 +71,23 @@
 
 <style>
   .hero {
-    min-height: calc(100vh - 4rem);
     display: flex;
     align-items: center;
-    padding: 5.5rem 0 4rem;
+    padding: 0.5rem 0;
   }
 
   .hero-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
     align-items: center;
-    gap: 3.5rem;
+    gap: 2.75rem;
+    width: 100%;
   }
 
   .hero-copy {
     display: flex;
     flex-direction: column;
-    gap: 1.45rem;
+    gap: 1.15rem;
   }
 
   .pulse-dot {
@@ -100,10 +100,10 @@
 
   .hero-title {
     margin: 0;
-    font-size: clamp(2.35rem, 4.8vw, 3.85rem);
+    font-size: clamp(2rem, 3.8vw, 3.25rem);
     font-weight: 800;
     letter-spacing: -0.03em;
-    line-height: 1.08;
+    line-height: 1.09;
     color: var(--text-primary);
   }
 
@@ -116,26 +116,26 @@
 
   .hero-description {
     margin: 0;
-    max-width: 600px;
-    font-size: 1.12rem;
+    max-width: 580px;
+    font-size: 1.03rem;
     font-weight: 400;
     color: var(--text-secondary);
-    line-height: 1.72;
+    line-height: 1.65;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.9rem;
-    margin-top: 0.35rem;
+    gap: 0.85rem;
+    margin-top: 0.2rem;
   }
 
   .hero-stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
-    margin: 1.35rem 0 0;
-    padding-top: 1.6rem;
+    gap: 1rem;
+    margin: 0.9rem 0 0;
+    padding-top: 1.2rem;
     border-top: 1px solid var(--border-subtle);
   }
 

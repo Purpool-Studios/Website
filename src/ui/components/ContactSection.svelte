@@ -20,46 +20,52 @@
   }
 </script>
 
-<section id="contacto" class="section contact-section">
-  <div class="container">
-    <div class="contact-card glass-card">
-      <div class="contact-copy">
-        <span class="eyebrow">Colaboración</span>
-        <h2 class="section-title">¿Construimos algo juntos?</h2>
-        <p class="section-subtitle">
-          Estamos abiertos a colaboraciones técnicas, alianzas entre estudios independientes y proyectos que exijan rendimiento real y cuidado visual.
-        </p>
-      </div>
-
-      <div class="contact-actions">
-        <a href={`mailto:${STUDIO_EMAIL}`} class="btn btn-primary">
-          Escribir a Purpool Studios
-        </a>
-        <button type="button" class="btn btn-secondary" onclick={copyEmail}>
-          {#if copied}
-            Correo copiado
-          {:else}
-            Copiar {STUDIO_EMAIL}
-          {/if}
-        </button>
-      </div>
+<section id="contacto" class="card-section contact-section">
+  <div class="contact-card glass-card">
+    <div class="contact-copy">
+      <span class="eyebrow">Colaboración</span>
+      <h2 class="section-title">¿Construimos algo juntos?</h2>
+      <p class="section-subtitle">
+        Estamos abiertos a colaboraciones técnicas, alianzas entre estudios independientes y proyectos que exijan rendimiento real y cuidado visual.
+      </p>
     </div>
 
-    <footer class="studio-footer">
-      <div class="footer-brand">
-        <span class="footer-dot" aria-hidden="true"></span>
-        <span>Purpool Studios</span>
-      </div>
-      <p class="footer-note">
-        Conglomeración independiente de desarrollo de software y videojuegos · 2026
-      </p>
-    </footer>
+    <div class="contact-actions">
+      <a href={`mailto:${STUDIO_EMAIL}`} class="btn btn-primary">
+        Escribir a Purpool Studios
+      </a>
+      <button type="button" class="btn btn-secondary" onclick={copyEmail}>
+        {#if copied}
+          Correo copiado ✓
+        {:else}
+          Copiar {STUDIO_EMAIL}
+        {/if}
+      </button>
+    </div>
   </div>
+
+  <footer class="studio-footer">
+    <div class="footer-brand">
+      <span class="footer-dot" aria-hidden="true"></span>
+      <span>Purpool Studios</span>
+    </div>
+    <p class="footer-note">
+      Conglomeración independiente de desarrollo de software y videojuegos · 2026
+    </p>
+  </footer>
 </section>
 
 <style>
+  .card-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    height: 100%;
+  }
+
   .contact-section {
-    padding-bottom: 3rem;
+    justify-content: center;
   }
 
   .contact-card {
@@ -67,7 +73,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 2.5rem;
-    padding: 3rem;
+    padding: 2.5rem;
     background:
       radial-gradient(circle at 90% 15%, rgba(168, 85, 247, 0.18), transparent 55%),
       radial-gradient(circle at 10% 90%, rgba(56, 189, 248, 0.1), transparent 50%),
@@ -78,7 +84,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    max-width: 560px;
+    max-width: 540px;
   }
 
   .contact-actions {
@@ -93,11 +99,10 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 2.5rem;
+    gap: 0.75rem;
     padding: 0 0.5rem;
     color: var(--text-muted);
-    font-size: 0.88rem;
+    font-size: 0.84rem;
   }
 
   .footer-brand {
@@ -119,11 +124,11 @@
     margin: 0;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     .contact-card {
       flex-direction: column;
       align-items: flex-start;
-      padding: 2rem;
+      padding: 1.75rem;
     }
   }
 </style>

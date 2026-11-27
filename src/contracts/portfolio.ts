@@ -43,3 +43,19 @@ export interface StackLayer {
   readonly technology: string;
   readonly summary: string;
 }
+
+export interface MemberSkillDetail {
+  readonly skill: string;
+  readonly explanation: string;
+}
+
+export interface TeamMember {
+  readonly id: string;
+  readonly handle: string;
+  readonly role: string;
+  readonly avatarUrl: string;
+  readonly accentHex: string;
+  readonly summary: string;
+  readonly skills: readonly MemberSkillDetail[];
+  readonly tags: readonly string[];
+}
