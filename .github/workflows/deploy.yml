@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+# Despliegue manual desde cualquier rama
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Entorno de destino'
+        required: false
+        default: 'github-pages'
+
+# Permisos mínimos requeridos por el publisher oficial de Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita despliegues paralelos; el más reciente cancela al anterior
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Vite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node 20 reproduce el entorno declarado en shell.nix
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # La variable VITE_BASE_PATH permite que vite.config.ts inyecte el
+      # sub-directorio correcto cuando el repo no está en la raíz del dominio.
+      - name: Build production bundle
+        run: npm run build
+        env:
+          VITE_BASE_PATH: '/${{ github.event.repository.name }}/'
+
+      # Empaqueta dist/ con los metadatos que espera el deployer de Pages
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
