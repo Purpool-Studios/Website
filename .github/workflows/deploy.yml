@@ -44,7 +44,7 @@ jobs:
       - name: Build production bundle
         run: npm run build
         env:
-          VITE_BASE_PATH: '/${{ github.event.repository.name }}/'
+          VITE_BASE_PATH: '/'
 
       # Empaqueta dist/ con los metadatos que espera el deployer de Pages
       - name: Configure GitHub Pages
