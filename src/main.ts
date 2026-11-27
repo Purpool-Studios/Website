@@ -1,29 +1,84 @@
 import { mount } from 'svelte';
-import './ui/global.css';
-import App from './ui/App.svelte';
-import { Auth0Service } from './infrastructure/Auth0Service';
-import { GameApiClient } from './infrastructure/GameApiClient';
+import '@ui/styles/app.css';
+import App from '@ui/App.svelte';
+import { PurpoolEngine } from '@core/PurpoolEngine';
+import { TypedEventBus } from '@infrastructure/TypedEventBus';
+import { BrowserFrameScheduler, Canvas2DSurface } from '@infrastructure/Canvas2DSurface';
 
-const bootstrap = async () => {
-  const targetElement = document.getElementById('app');
-  if (!targetElement) {
-    throw new Error("[UI Engine] Error crítico: No se encontró '#app' en el DOM.");
+function bootstrap(): void {
+  const rootTarget = document.getElementById('app');
+  if (!rootTarget) {
+    throw new Error('Root mount element #app was not found.');
   }
 
-  // Composición de dependencias
-  const authService = new Auth0Service();
-  await authService.init(); // Inicializa Auth0 y procesa variables de entorno
+  const eventBus = new TypedEventBus();
 
-  const apiClient = new GameApiClient(authService);
+  // Mount dedicated background Canvas 2D surface for the Core ECS Engine
+  const canvas = document.createElement('canvas');
+  canvas.className = 'engine-canvas';
+  canvas.setAttribute('aria-hidden', 'true');
+  document.body.prepend(canvas);
 
-  // Montamos la aplicación inyectando los contratos (no clases concretas)
+  const surface = new Canvas2DSurface(canvas);
+  const scheduler = new BrowserFrameScheduler();
+
+  const engine = new PurpoolEngine(eventBus, surface, scheduler, {
+    poolCapacity: 52,
+    connectionRadius: 155,
+    pointerInfluenceRadius: 145
+  });
+
+  // Wire DOM environment events into the decoupled EventBus
+  const handleResize = (): void => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    surface.resize(width, height, dpr);
+    eventBus.emit('viewport:resized', { width, height, dpr });
+  };
+
+  const handlePointerMove = (event: PointerEvent): void => {
+    eventBus.emit('pointer:moved', {
+      x: event.clientX,
+      y: event.clientY,
+      active: true
+    });
+  };
+
+  const handlePointerLeave = (): void => {
+    eventBus.emit('pointer:moved', {
+      x: 0,
+      y: 0,
+      active: false
+    });
+  };
+
+  const handleVisibilityChange = (): void => {
+    eventBus.emit('engine:visibility-changed', {
+      hidden: document.hidden
+    });
+  };
+
+  window.addEventListener('resize', handleResize, { passive: true });
+  window.addEventListener('pointermove', handlePointerMove, { passive: true });
+  window.addEventListener('pointerleave', handlePointerLeave, { passive: true });
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  // Respect user's reduced-motion preference by rendering a single static frame instead of a loop
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    engine.renderSingleFrame();
+  } else {
+    engine.start();
+  }
+
+  // Mount Svelte 5 HUD/Overlay layer
   mount(App, {
-    target: targetElement,
+    target: rootTarget,
     props: {
-      authService,
-      apiClient
+      eventBus
     }
   });
-};
+}
 
-bootstrap().catch(console.error);
+bootstrap();

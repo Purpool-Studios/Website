@@ -1,75 +1,104 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import type { IAuthService } from '../contracts/auth';
-  import type { IApiClient } from '../contracts/api';
-  
-  import LandingView from './views/LandingView.svelte';
-  import AuthCallbackView from './views/AuthCallbackView.svelte';
-  import OnboardingView from './views/OnboardingView.svelte';
-  import MainLayout from './views/MainLayout.svelte';
+  import type { EngineMetrics, EventBus, SectionId } from '@contracts/events';
+  import type { ProjectItem } from '@contracts/portfolio';
+  import { NAV_ITEMS, PROJECTS, STACK_LAYERS, STUDIO_PILLARS } from '@infrastructure/studioData';
+  import FloatingNav from './components/FloatingNav.svelte';
+  import HeroSection from './components/HeroSection.svelte';
+  import StudioSection from './components/StudioSection.svelte';
+  import ProjectsSection from './components/ProjectsSection.svelte';
+  import TechSection from './components/TechSection.svelte';
+  import ContactSection from './components/ContactSection.svelte';
+  import ProjectModal from './components/ProjectModal.svelte';
 
-  let { authService, apiClient }: { authService: IAuthService; apiClient: IApiClient } = $props();
+  interface Props {
+    eventBus: EventBus;
+  }
 
-  type AppState = 'INITIALIZING' | 'LANDING' | 'PROCESSING_AUTH' | 'ONBOARDING' | 'MAIN';
-  let currentState: AppState = $state('INITIALIZING');
+  let { eventBus }: Props = $props();
 
-  onMount(async () => {
-    try {
-      if (authService.hasRedirectCallback()) {
-        currentState = 'PROCESSING_AUTH';
-        await authService.handleRedirectCallback();
-        await evaluateUserDatabase();
-        return;
-      }
-
-      const isAuth = await authService.isAuthenticated();
-      if (isAuth) {
-        currentState = 'PROCESSING_AUTH'; 
-        await evaluateUserDatabase();
-      } else {
-        currentState = 'LANDING';
-      }
-    } catch (error) {
-      console.error("[App] Fallo en la inicialización:", error);
-      currentState = 'LANDING';
-    }
+  let activeSection = $state<SectionId>('inicio');
+  let selectedProjectId = $state<string | null>(null);
+  let engineMetrics = $state<EngineMetrics>({
+    fps: 0,
+    activeNodes: 0,
+    frameTimeMs: 0
   });
 
-  const evaluateUserDatabase = async () => {
-    try {
-      const user = await apiClient.getCurrentUser();
-      if (user) {
-        currentState = 'MAIN'; 
-      } else {
-        currentState = 'ONBOARDING'; 
-      }
-    } catch (error) {
-      console.error("[App] Error validando base de datos:", error);
-      authService.logout(); 
-    }
-  };
+  const selectedProject = $derived<ProjectItem | null>(
+    selectedProjectId ? PROJECTS.find((p) => p.id === selectedProjectId) ?? null : null
+  );
 
-  const onOnboardingComplete = () => {
-    currentState = 'MAIN';
-  };
+  function navigateToSection(sectionId: SectionId): void {
+    activeSection = sectionId;
+    eventBus.emit('nav:section-selected', { sectionId });
+    eventBus.emit('nav:section-active', { sectionId });
+
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function handleSelectProject(projectId: string): void {
+    selectedProjectId = projectId;
+    eventBus.emit('project:selected', { projectId });
+  }
+
+  function handleCloseModal(): void {
+    selectedProjectId = null;
+    eventBus.emit('project:modal-closed', {});
+  }
+
+  $effect(() => {
+    const offMetrics = eventBus.on('engine:metrics-updated', (metrics) => {
+      engineMetrics = metrics;
+    });
+
+    const sectionIds: readonly SectionId[] = ['inicio', 'estudio', 'proyectos', 'tecnologia', 'contacto'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const id = entry.target.id as SectionId;
+            if (activeSection !== id) {
+              activeSection = id;
+              eventBus.emit('nav:section-active', { sectionId: id });
+            }
+          }
+        }
+      },
+      {
+        rootMargin: '-38% 0px -45% 0px',
+        threshold: 0
+      }
+    );
+
+    for (const id of sectionIds) {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    }
+
+    return () => {
+      offMetrics();
+      observer.disconnect();
+    };
+  });
 </script>
 
-{#if currentState === 'INITIALIZING'}
-  <div class="loader-bg"></div>
-{:else if currentState === 'LANDING'}
-  <LandingView {authService} />
-{:else if currentState === 'PROCESSING_AUTH'}
-  <AuthCallbackView />
-{:else if currentState === 'ONBOARDING'}
-  <OnboardingView {apiClient} onComplete={onOnboardingComplete} />
-{:else if currentState === 'MAIN'}
-  <!-- AHORA INYECTAMOS EL apiClient A MainLayout -->
-  <MainLayout {apiClient} onLogout={() => authService.logout()} />
-{/if}
+<main class="hud-shell">
+  <HeroSection onNavigate={navigateToSection} />
+  <StudioSection pillars={STUDIO_PILLARS} />
+  <ProjectsSection projects={PROJECTS} onSelectProject={handleSelectProject} />
+  <TechSection layers={STACK_LAYERS} metrics={engineMetrics} />
+  <ContactSection />
+</main>
 
-<style>
-  .loader-bg {
-    width: 100vw; height: 100vh;
-    background-color: var(--color-bg-deep);
-  }
-</style>
+<FloatingNav
+  items={NAV_ITEMS}
+  {activeSection}
+  onSelect={navigateToSection}
+/>
+
+<ProjectModal project={selectedProject} onClose={handleCloseModal} />

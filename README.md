@@ -1,7 +1,6 @@
-# Game Site Root
+# Sitio web principal
 
-## Descripción Macro
-Aplicación web de alto rendimiento orientada al desarrollo de un juego con estándares de Clean Code y principios SOLID. Diseñada bajo un enfoque de **cero overhead**, costo de CPU mínimo y control estricto de memoria para evitar pausas por Garbage Collection.
+Sitio web de alto rendimiento orientado a la presentación de la organización **Purpool Studios**. Diseñada bajo un enfoque de **cero overhead**, costo de CPU mínimo y control estricto de memoria para evitar pausas por Garbage Collection. La navegación por el sitio debe ser extremadamente veloz, sin pérdidas en la calidad visual o experiencia del usuario.
 
 ## Stack Tecnológico
 * **Entorno de Ejecución Determinista:** Nix (`shell.nix`)

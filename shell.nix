@@ -9,7 +9,7 @@ pkgs.mkShell {
 
   shellHook = ''
     echo "=========================================="
-    echo " Visual Game Dev Environment Active (Nix)"
+    echo "        Environment Active (Nix)"
     echo "=========================================="
   '';
 }
